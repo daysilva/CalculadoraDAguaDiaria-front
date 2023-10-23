@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Água Diária</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Água Diária</h1>
+
+        <label for="peso"> Qual seu Peso (em kg):</label>
+        <input type="number" id="peso" min="0" step="0.01"><br>
+
+        <label for="resultado">Quantidade recomendada de água por dia:</label>
+        <p id="resultado"></p>
+
+        <button onclick="calcularAgua()">Calcular</button>
+    </div>
+
+    <script>
+        function calcularAgua() {
+            const peso = parseFloat(document.getElementById('peso').value);
+            
+            // Valor médio recomendado é de 30 a 35 ml de água por kg de peso
+            const quantidadeRecomendadaMl = peso * 35;
+            const quantidadeRecomendadaL = (quantidadeRecomendadaMl / 1000).toFixed(2);
+
+            document.getElementById('resultado').textContent = `Você deve beber aproximadamente ${quantidadeRecomendadaL} litros de água por dia.`;
+        }
+    </script>
+</body>
+</html>
+
+
