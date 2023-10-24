@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculadora de Água Diária</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="container" id="primeira-pagina">
+        <h1>Calculadora de Água Diária</h1>
+
+        <label for="peso">Qual seu nome :</label>
+        <input type="nome" id="nome" min="0" step="0.01"><br>
+        <label for="peso">Qual seu Peso (em kg):</label>
+        <input type="number" id="peso" min="0" step="0.01"><br>
+
+        <p id="resultado"></p>
+
+        <button type="button" onclick="calcularAgua()">Calcular</button>
+        <button type="button" onclick="pegardados()">listar</button>
+    </div>
+
+    <div class="container" id="segunda-pagina" style="display: none;">
+        <div id="lista">
+
+        </div>
+    </div>
+        
+
+
+    <script>
+        function calcularAgua() {
+            const peso = parseFloat(document.getElementById('peso').value);
+            
+            // Valor médio recomendado é de 30 a 35 ml de água por kg de peso
+            const quantidadeRecomendadaMl = peso * 35;
+            const quantidadeRecomendadaL = (quantidadeRecomendadaMl / 1000).toFixed(2);
+
+            const nome = document.getElementById("nome").value
+            
+            cadastrarNoBancoDeDados(nome, quantidadeRecomendadaL)
+        }
+
+        function pegardados(){
+
+            const hostUrl = window.location.href
+            const host = hostUrl.split("//")[1]
+            const ip = host.split(":")[0]
+            const urlApi = `http://` + ip + ":3000/listar"
+            console.log(urlApi);
+
+            const ul = document.getElementById("lista")
+            document.getElementById('segunda-pagina').style.display = 'block';
+            document.getElementById('primeira-pagina').style.display = 'none';
+            
+            let list = null
+
+            fetch(urlApi)
+            .then(response => {
+                if (!response.ok) {
+                throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                return response.json(); // ou response.text() se a resposta não for JSON
+            })
+            .then(data => {
+                // Aqui você pode usar os dados da resposta, por exemplo, imprimir no console.
+                list = data.data
+
+                list.forEach(element => {
+                    ul.innerHTML += `
+                    <p><strong>nome:</strong> ${element.name} <br>
+                    <strong>quantidade de agua recomendada</strong> ${element.quantAgua}L</p>`
+                });
+            })
+            .catch(error => {
+                // Lida com erros, por exemplo, imprime no console.
+                console.error('Erro na requisição:', error);
+            });
+        }
+
+
+        function cadastrarNoBancoDeDados(nome, quant) {
+   
+        // URL do endpoint no servidor para cadastrar no banco de dados
+        const url = 'http://localhost:3000';
+
+        // Dados a serem enviados no corpo da solicitação
+        const dadosCadastro = {
+            name: nome,
+            quantAgua: quant
+        };
+
+        // Opções da solicitação, incluindo o método, cabeçalhos e corpo
+        const opcoesCadastro = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Tipo de conteúdo: JSON
+            },
+            body: JSON.stringify(dadosCadastro) // Converte os dados em JSON
+        };
+
+        // Envia a solicitação de cadastro para o backend
+        fetch(`${url}/cadastrar`, opcoesCadastro)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na solicitação');
+                }
+                return response.json(); // Analisa a resposta como JSON
+            })
+            .then(data => {
+                console.log('Dados cadastrados com sucesso:', data);
+                // Você pode adicionar aqui qualquer ação adicional após o cadastro bem-sucedido
+            })
+            .catch(error => {
+                console.error('Erro no cadastro:', error);
+                // Você pode lidar com o erro aqui, como exibir uma mensagem de erro para o usuário
+            });
+}
+
+    </script>
+</body>
+</html>

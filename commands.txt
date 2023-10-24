@@ -1,0 +1,5 @@
+# criar a imagem
+docker build -t front-image .
+
+# executar container
+docker run -p 8080:80 --name front -d front-image
