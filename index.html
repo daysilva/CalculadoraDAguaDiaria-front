@@ -30,6 +30,7 @@
 
     <script>
         function calcularAgua() {
+
             const peso = parseFloat(document.getElementById('peso').value);
             
             // Valor médio recomendado é de 30 a 35 ml de água por kg de peso
@@ -47,7 +48,6 @@
             const host = hostUrl.split("//")[1]
             const ip = host.split(":")[0]
             const urlApi = `http://` + ip + ":3000/listar"
-            console.log(urlApi);
 
             const ul = document.getElementById("lista")
             document.getElementById('segunda-pagina').style.display = 'block';
@@ -81,8 +81,10 @@
 
         function cadastrarNoBancoDeDados(nome, quant) {
    
-        // URL do endpoint no servidor para cadastrar no banco de dados
-        const url = 'http://localhost:3000';
+            const hostUrl = window.location.href
+            const host = hostUrl.split("//")[1]
+            const ip = host.split(":")[0]
+            const urlApi = `http://` + ip + ":3000/cadastrar"
 
         // Dados a serem enviados no corpo da solicitação
         const dadosCadastro = {
@@ -100,7 +102,7 @@
         };
 
         // Envia a solicitação de cadastro para o backend
-        fetch(`${url}/cadastrar`, opcoesCadastro)
+        fetch(urlApi, opcoesCadastro)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Erro na solicitação');
