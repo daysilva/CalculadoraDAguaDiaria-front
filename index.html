@@ -130,7 +130,7 @@
         const opcoesCadastro = {
             method: 'POST',
             headers: {
-                'Content-Type': 'applicatioquantidadeRecomendadaLn/json', // Tipo de conteúdo: JSON
+                'Content-Type': 'application/json', // Tipo de conteúdo: JSON
             },
             body: JSON.stringify(dadosCadastro) // Converte os dados em JSON
         };
@@ -139,7 +139,7 @@
         fetch(urlApi, opcoesCadastro)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Erro na solicitação');
+                    throw new Error('Erro na solicitacao');
                 }
                 return response.json(); // Analisa a resposta como JSON
             })
