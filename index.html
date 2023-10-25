@@ -8,6 +8,8 @@
 <body>
     <div class="container" id="primeira-pagina">
         <h1>Calculadora de Água Diária</h1>
+        <p>digite o seu peso e veja a quantidade de água que você deve 
+           tomar por dia</p>
 
         <label for="peso">Qual seu nome :</label>
         <input type="nome" id="nome" min="0" step="0.01"><br>
@@ -22,7 +24,14 @@
 
     <div class="container" id="segunda-pagina" style="display: none;">
         <div id="lista">
+            <h1>Cadastros anteriores</h1>
 
+            <p id="msg-error" style="display: none;">Erro na requisição!</p>
+
+            <img 
+                src="./images/1487.gif" 
+                alt="loading" id="loading" 
+                style="display: none;">
         </div>
     </div>
         
@@ -32,12 +41,15 @@
         function calcularAgua() {
 
             const peso = parseFloat(document.getElementById('peso').value);
-            
+
             // Valor médio recomendado é de 30 a 35 ml de água por kg de peso
             const quantidadeRecomendadaMl = peso * 35;
             const quantidadeRecomendadaL = (quantidadeRecomendadaMl / 1000).toFixed(2);
 
             const nome = document.getElementById("nome").value
+
+            document.getElementById("resultado").innerHTML = `${nome}, você deve tomar ${quantidadeRecomendadaL} litros por dia`
+
             
             cadastrarNoBancoDeDados(nome, quantidadeRecomendadaL)
         }
@@ -49,32 +61,54 @@
             const ip = host.split(":")[0]
             const urlApi = `http://` + ip + ":3000/listar"
 
-            const ul = document.getElementById("lista")
-            document.getElementById('segunda-pagina').style.display = 'block';
+            const result = document.getElementById("lista")
+            const container = document.getElementById('segunda-pagina')
+            container.style.display = 'block';
+
             document.getElementById('primeira-pagina').style.display = 'none';
             
+            const loading = document.getElementById("loading")
+            loading.style.display = 'block'
+
+            const msgError = document.getElementById("msg-error")
+
+
             let list = null
 
             fetch(urlApi)
             .then(response => {
                 if (!response.ok) {
-                throw new Error(`Erro na requisição: ${response.status}`);
+                    loading.style.display = 'none'
+
+                    container.style.boxShadow = "2px 0px 10px red"
+                    msgError.style.display = 'block'
+                    setTimeout(() => {
+                        container.style.boxShadow = ""
+                    }, 4000);
+
+                    throw new Error(`Erro na requisição: ${response.status}`);
                 }
                 return response.json(); // ou response.text() se a resposta não for JSON
             })
             .then(data => {
-                // Aqui você pode usar os dados da resposta, por exemplo, imprimir no console.
+
+                loading.style.display = 'none'
+
                 list = data.data
 
                 list.forEach(element => {
-                    ul.innerHTML += `
+                    result.innerHTML += `
                     <p><strong>nome:</strong> ${element.name} <br>
                     <strong>quantidade de agua recomendada</strong> ${element.quantAgua}L</p>`
                 });
             })
             .catch(error => {
-                // Lida com erros, por exemplo, imprime no console.
-                console.error('Erro na requisição:', error);
+                loading.style.display = 'none'
+                container.style.boxShadow = "2px 0px 10px red"
+                msgError.style.display = 'block'
+                    setTimeout(() => {
+                        container.style.boxShadow = ""
+                    }, 4000);
             });
         }
 
@@ -96,7 +130,7 @@
         const opcoesCadastro = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json', // Tipo de conteúdo: JSON
+                'Content-Type': 'applicatioquantidadeRecomendadaLn/json', // Tipo de conteúdo: JSON
             },
             body: JSON.stringify(dadosCadastro) // Converte os dados em JSON
         };
