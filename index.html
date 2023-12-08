@@ -57,10 +57,11 @@
 
         function pegardados(){
 
-            const hostUrl = window.location.href
-            const host = hostUrl.split("//")[1]
-            const ip = host.split(":")[0]
-            const urlApi = `http://` + ip + ":3000/listar"
+            // const hostUrl = window.location.href
+            // const host = hostUrl.split("//")[1]
+            // const ip = host.split(":")[0]
+            // const urlApi = `http://` + ip + ":3000/listar"
+            const urlApi = "htpp://backend:3000/listar"
 
             const result = document.getElementById("lista")
             const container = document.getElementById('segunda-pagina')
@@ -92,6 +93,7 @@
                 return response.json(); // ou response.text() se a resposta não for JSON
             })
             .then(data => {
+                console.log("oia: ", data);
 
                 loading.style.display = 'none'
 
@@ -116,10 +118,11 @@
 
         function cadastrarNoBancoDeDados(nome, quant) {
    
-            const hostUrl = window.location.href
-            const host = hostUrl.split("//")[1]
-            const ip = host.split(":")[0]
-            const urlApi = `http://` + ip + ":3000/cadastrar"
+            //const hostUrl = window.location.href
+            //const host = hostUrl.split("//")[1]
+            //const ip = host.split(":")[0]
+            //const urlApi = `http://` + ip + ":3000/cadastrar"
+            const urlApi = "htpp://backend:3000/cadastrar"
 
         // Dados a serem enviados no corpo da solicitação
         const dadosCadastro = {
