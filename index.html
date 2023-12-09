@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container" id="primeira-pagina">
-        <h1>Calculadora de Agua Diaria (att.)</h1>
+        <h1>Calculadora de Agua Diaria</h1>
         <p>digite o seu peso e veja a quantidade de agua que voce deve 
            tomar por dia</p>
 
@@ -57,11 +57,7 @@
 
         function pegardados(){
 
-            // const hostUrl = window.location.href
-            // const host = hostUrl.split("//")[1]
-            // const ip = host.split(":")[0]
-            // const urlApi = `http://` + ip + ":3000/listar"
-            const urlApi = "htpp://backend:3000/listar"
+            const urlApi = "http://api.192.168.49.2.nip.io/listar"
 
             const result = document.getElementById("lista")
             const container = document.getElementById('segunda-pagina')
@@ -117,12 +113,8 @@
 
 
         function cadastrarNoBancoDeDados(nome, quant) {
-   
-            //const hostUrl = window.location.href
-            //const host = hostUrl.split("//")[1]
-            //const ip = host.split(":")[0]
-            //const urlApi = `http://` + ip + ":3000/cadastrar"
-            const urlApi = "htpp://backend:3000/cadastrar"
+
+            const urlApi = "http://api.192.168.49.2.nip.io/cadastrar"
 
         // Dados a serem enviados no corpo da solicitação
         const dadosCadastro = {
