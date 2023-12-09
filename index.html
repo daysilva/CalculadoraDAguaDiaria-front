@@ -21,25 +21,15 @@
         <p id="resultado"></p>
 
         <button type="button" onclick="calcularAgua()">Calcular</button>
-        <button type="button" onclick="pegardados()">listar</button>
+        <button type="button" onclick="nextPage()">listar</button>
     </div>
-
-    <div class="container" id="segunda-pagina" style="display: none;">
-        <div id="lista">
-            <h1>Cadastros anteriores</h1>
-
-            <p id="msg-error" style="display: none;">Erro na requisicao!</p>
-
-            <img 
-                src="./images/1487.gif" 
-                alt="loading" id="loading" 
-                style="display: none;">
-        </div>
-    </div>
-        
-
 
     <script>
+
+        function nextPage() {
+            window.location.href = "./registros.html"
+        }
+
         function calcularAgua() {
 
             const peso = parseFloat(document.getElementById('peso').value);
@@ -54,62 +44,6 @@
 
             
             cadastrarNoBancoDeDados(nome, quantidadeRecomendadaL)
-        }
-
-        function pegardados(){
-
-            const urlApi = "http://api.192.168.49.2.nip.io/listar"
-
-            const result = document.getElementById("lista")
-            const container = document.getElementById('segunda-pagina')
-            container.style.display = 'block';
-
-            document.getElementById('primeira-pagina').style.display = 'none';
-            
-            const loading = document.getElementById("loading")
-            loading.style.display = 'block'
-
-            const msgError = document.getElementById("msg-error")
-
-
-            let list = null
-
-            fetch(urlApi)
-            .then(response => {
-                if (!response.ok) {
-                    loading.style.display = 'none'
-
-                    container.style.boxShadow = "2px 0px 10px red"
-                    msgError.style.display = 'block'
-                    setTimeout(() => {
-                        container.style.boxShadow = ""
-                    }, 4000);
-
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                return response.json(); // ou response.text() se a resposta não for JSON
-            })
-            .then(data => {
-                console.log("oia: ", data);
-
-                loading.style.display = 'none'
-
-                list = data.data
-
-                list.forEach(element => {
-                    result.innerHTML += `
-                    <p><strong>nome:</strong> ${element.name} <br>
-                    <strong>quantidade de agua recomendada</strong> ${element.quantAgua}L</p>`
-                });
-            })
-            .catch(error => {
-                loading.style.display = 'none'
-                container.style.boxShadow = "2px 0px 10px red"
-                msgError.style.display = 'block'
-                    setTimeout(() => {
-                        container.style.boxShadow = ""
-                    }, 4000);
-            });
         }
 
 
@@ -142,11 +76,9 @@
             })
             .then(data => {
                 console.log('Dados cadastrados com sucesso:', data);
-                // Você pode adicionar aqui qualquer ação adicional após o cadastro bem-sucedido
             })
             .catch(error => {
                 console.error('Erro no cadastro:', error);
-                // Você pode lidar com o erro aqui, como exibir uma mensagem de erro para o usuário
             });
 }
 

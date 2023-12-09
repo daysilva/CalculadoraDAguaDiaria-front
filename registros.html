@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Calculador de Agua Diaria</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+    <div class="container" id="segunda-pagina">
+        <div id="lista">
+            <h1>Cadastros anteriores</h1>
+
+            <p id="msg-error" style="display: none;">Erro na requisicao!</p>
+
+            <img 
+                src="./images/1487.gif" 
+                alt="loading" id="loading" 
+                style="display: none;">
+        </div>
+
+        <button type="button" onclick="previousPage()">voltar</button>
+    </div>
+
+    <script>
+
+        window.onload = () => {
+            pegardados()
+        }
+
+        function previousPage() {
+            window.location.href = "index.html"
+        }
+
+        function pegardados(){
+
+            const urlApi = "http://api.192.168.49.2.nip.io/listar"
+
+            const result = document.getElementById("lista")
+
+            const loading = document.getElementById("loading")
+            loading.style.display = 'block'
+
+            const msgError = document.getElementById("msg-error")
+
+
+            let list = null
+
+            fetch(urlApi)
+            .then(response => {
+                if (!response.ok) {
+                    loading.style.display = 'none'
+
+                    container.style.boxShadow = "2px 0px 10px red"
+                    msgError.style.display = 'block'
+                    setTimeout(() => {
+                        container.style.boxShadow = ""
+                    }, 4000);
+
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                return response.json(); // ou response.text() se a resposta não for JSON
+            })
+            .then(data => {
+                console.log("oia: ", data);
+
+                loading.style.display = 'none'
+
+                list = data.data
+
+                list.forEach(element => {
+                    result.innerHTML += `
+                    <p><strong>nome:</strong> ${element.name} <br>
+                    <strong>quantidade de agua recomendada</strong> ${element.quantAgua}L</p>`
+                });
+            })
+            .catch(error => {
+                loading.style.display = 'none'
+                container.style.boxShadow = "2px 0px 10px red"
+                msgError.style.display = 'block'
+                    setTimeout(() => {
+                        container.style.boxShadow = ""
+                    }, 4000);
+            });
+        }
+
+    </script>
+</body>
+</html>
