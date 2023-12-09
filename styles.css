@@ -26,6 +26,11 @@ label, p, strong {
     min-height: 20rem;
 }
 
+#branch {
+    color: darkgreen;
+    text-decoration: underline;
+}
+
 label, input, button {
     display: block;
     margin: 10px 0;
